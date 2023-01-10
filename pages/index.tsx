@@ -9,10 +9,10 @@ import CartTotal from "../components/CartTotal";
 import styles from "../styles/Home.module.css";
 
 function Home() {
-  const [showTotals, setShowTotals] = useState(false);
+  const [showTotals, setShowTotals] = useState(true);
   const [result] = useQuery({
     query: `
-    {
+    query Cart {
       cart {
         id
         total
@@ -24,6 +24,7 @@ function Home() {
       }
     }`,
     requestPolicy: "cache-and-network",
+    pause: typeof window === "undefined",
   });
 
   return (
@@ -54,12 +55,18 @@ function Home() {
   );
 }
 
-export default withUrqlClient(() => ({
-  url: "/api/graphql",
-  exchanges: [
-    devtoolsExchange,
-    dedupExchange,
-    cacheExchange({}),
-    fetchExchange,
-  ],
-}))(Home);
+export default withUrqlClient(
+  (ssr, _ctx) => {
+    return {
+      url: "/api/graphql",
+      exchanges: [
+        ssr,
+        devtoolsExchange,
+        dedupExchange,
+        cacheExchange({}),
+        fetchExchange,
+      ],
+    };
+  },
+  { ssr: true }
+)(Home);

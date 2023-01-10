@@ -31,7 +31,7 @@ const schema = createSchema({
       greetings: () => "This is the `greetings` field of the root `Query` type",
       cart: () => {
         if (Math.random() > 0.5) {
-          throw new Error("aa");
+          throw new Error("Cart error");
         }
 
         return {
