@@ -60,10 +60,10 @@ export default withUrqlClient(
     return {
       url: "/api/graphql",
       exchanges: [
-        ssr,
         devtoolsExchange,
         dedupExchange,
         cacheExchange({}),
+        ssr,
         fetchExchange,
       ],
     };
